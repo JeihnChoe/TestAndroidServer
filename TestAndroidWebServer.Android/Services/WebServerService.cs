@@ -62,4 +62,13 @@ namespace TestAndroidWebServer.Android.Services
             }
         }
     }
+
+    // API 핸들러 인터페이스
+    public interface IApiHandler
+    {
+        string Path { get; }
+        Task HandleAsync(HttpContext context);
+    }
+
+
 }
