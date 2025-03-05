@@ -6,39 +6,10 @@ using System.Threading.Tasks;
 
 namespace TestAndroidWebServer.Android.Services
 {
-    [Route("")]
-    [ApiController]
-    public class ApiController : ControllerBase
-    {
-        [HttpGet("")]
-        public IActionResult GetRoot()
-        {
-            return Content("ROOT", "application/json");
-        }
-        [HttpGet("order")]
-        public IActionResult GetOrder()
-        {
-            return Content("ORDER", "application/json");
-        }
-        [HttpGet("path")]
-        public IActionResult GetPath()
-        {
-            return Content("PATH", "application/json");
-        }
-        [HttpGet("test")]
-        public IActionResult GetTestCommunication()
-        {
-            return Content("TestCommunication", "application/json");
-        }
-
-
-    }
-
-
     public class WebServerService
     {
 
-        string url = "http://0.0.0.0:8081";
+        string url = "http://0.0.0.0:8080";
         private IWebHost _webHost;
 
         public async Task StartAsync()
@@ -55,6 +26,7 @@ namespace TestAndroidWebServer.Android.Services
                 })
                 .Configure(app =>
                 {
+
                     //MVC 미들웨어 추가
                     app.UseMvc();
 
@@ -75,6 +47,4 @@ namespace TestAndroidWebServer.Android.Services
             }
         }
     }
-
-
 }
