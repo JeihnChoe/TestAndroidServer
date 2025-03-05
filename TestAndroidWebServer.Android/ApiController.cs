@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Android.Util;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis;
+using System;
 
 namespace TestAndroidWebServer.Android
 {
@@ -26,6 +29,7 @@ namespace TestAndroidWebServer.Android
         [HttpGet("gettest")]
         public IActionResult GetTestCommunication()
         {
+            LogRequest("Testlog");
             return Content("GETTestCommunication", "application/json");
         }
         [HttpPost("posttest")]
@@ -35,5 +39,18 @@ namespace TestAndroidWebServer.Android
             return Content("POSTTestCommunication", "application/json");
         }
 
+
+        private void LogRequest(string logtag)
+        {
+            string method = Request.Method;
+            string path = Request.Path.Value;
+            string queryString = Request.QueryString.ToString();
+            string remoteIp = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "Unknown";
+            DateTime timestamp = DateTime.Now;
+
+            string logMessage = $"{timestamp:yyyy-MM-dd HH:mm:ss} | {remoteIp} | {method} | {path}{queryString}";
+            Log.Info(logtag, logMessage);
+
+        }
     }
 }
