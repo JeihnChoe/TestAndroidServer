@@ -1,12 +1,43 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
 
 namespace TestAndroidWebServer.Android.Services
 {
+    [Route("")]
+    [ApiController]
+    public class ApiController : ControllerBase
+    {
+        [HttpGet("")]
+        public IActionResult GetRoot()
+        {
+            return Content("ROOT", "application/json");
+        }
+        [HttpGet("order")]
+        public IActionResult GetOrder()
+        {
+            return Content("ORDER", "application/json");
+        }
+        [HttpGet("path")]
+        public IActionResult GetPath()
+        {
+            return Content("PATH", "application/json");
+        }
+        [HttpGet("test")]
+        public IActionResult GetTestCommunication()
+        {
+            return Content("TestCommunication", "application/json");
+        }
+
+
+    }
+
+
     public class WebServerService
     {
+
         string url = "http://0.0.0.0:8081";
         private IWebHost _webHost;
 
@@ -18,33 +49,15 @@ namespace TestAndroidWebServer.Android.Services
                 .ConfigureServices(services =>
                 {
 
+                    services.AddMvc()
+                                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
                 })
                 .Configure(app =>
                 {
+                    //MVC 미들웨어 추가
+                    app.UseMvc();
 
-                    app.Map("", statusApp =>
-                    statusApp.Run(async context =>
-                    {
-                        context.Response.ContentType = "application/json";
-                        await context.Response.WriteAsync("Root 다");
-                    }
-                    ));
-
-                    app.Map("/path", statusApp =>
-                    statusApp.Run(async context =>
-                    {
-                        context.Response.ContentType = "application/json";
-                        await context.Response.WriteAsync("패쓰 1이다");
-                    }
-                    ));
-
-                    app.Map("/path1", statusApp =>
-                    statusApp.Run(async context =>
-                    {
-                        context.Response.ContentType = "application/json";
-                        await context.Response.WriteAsync("패쓰 2다 ");
-                    }
-                    ));
                 })
                 .Build();
 
@@ -61,13 +74,6 @@ namespace TestAndroidWebServer.Android.Services
                 _webHost = null;
             }
         }
-    }
-
-    // API 핸들러 인터페이스
-    public interface IApiHandler
-    {
-        string Path { get; }
-        Task HandleAsync(HttpContext context);
     }
 
 
